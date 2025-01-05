@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AuthPage from './pages/authPage';
+import AuthPage from './pages/AuthPage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import axios from 'axios';
