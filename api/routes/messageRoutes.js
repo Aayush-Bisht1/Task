@@ -1,10 +1,11 @@
 import express from "express";
 import Message from "../models/Message.js";
 import User from "../models/User.js";
+import { protectedRoute } from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.post("/send", async (req, res) => {
+router.post("/send", protectedRoute, async (req, res) => {
     try {
         const {content, receiver} = req.body;
         const isFriend = await User.friend.includes(receiver);
@@ -32,7 +33,7 @@ router.post("/send", async (req, res) => {
     }
 })
 
-router.get("/conversation", async (req, res) => {
+router.get("/conversation", protectedRoute, async (req, res) => {
     try {
         const messages = await Message.find({
             $or: [

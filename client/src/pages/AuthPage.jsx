@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Card } from "./ui/card";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { Card } from "@/components/ui/card";
 
 const AuthPage = () => {
   const [islogin, setIsLogin] = useState(true);
@@ -53,6 +53,7 @@ const AuthPage = () => {
       );
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
         window.location.href = "/dashboard";
       }
     } catch (error) {
@@ -68,7 +69,7 @@ const AuthPage = () => {
     formdata.append("location", formdataregister.location);
     formdata.append("age", formdataregister.age);
     formdata.append("gender", formdataregister.gender);
-    formdata.append("interest", formdataregister.interest);
+    formdata.append('interest', formdataregister.interest);
     formdata.append("profileImage", formdataregister.profileImage);
     try {
         const response = await axios.post(
@@ -81,6 +82,7 @@ const AuthPage = () => {
           )
           if(response.data.success){
             localStorage.setItem("token", response.data.token);
+            localStorage.setItem("user", JSON.stringify(response.data.user));
             window.location.href = "/dashboard";
           }
     } catch (error) {
@@ -109,7 +111,7 @@ const AuthPage = () => {
                 value={formdatalogin.password}
                 onChange={handleInputLoginChange}
               />
-              <Button type="submit">Sign in</Button>
+              <Button type="submit" className='w-full'>Sign in</Button>
             </form>
           ) : (
             <form
@@ -165,7 +167,7 @@ const AuthPage = () => {
                 name="profileImage"
                 onChange={handleImageChange}
               />
-              <Button type="submit">Sign up</Button>
+              <Button type="submit" className='w-full'>Sign up</Button>
             </form>
           )}
           <div className="mt-3 text-center">

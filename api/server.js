@@ -3,6 +3,7 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import authRoute from "./routes/authRoutes.js";
 import messageRoute from "./routes/messageRoutes.js";
+import friendRoute from "./routes/friendRoutes.js";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import fileUpload from "express-fileupload";
@@ -31,8 +32,7 @@ app.use(
 
 app.use("/api/auth", authRoute);
 app.use("/api/messages", messageRoute);
-// app.use("/api/users", userRoutes);
-// app.use("/api/friends", friendRoutes);
+app.use("/api/friends", friendRoute);
 
 app.use(express.static(path.join(__dirname, "/client/dist")));
 app.get("*", (req, res) => {
