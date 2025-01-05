@@ -45,7 +45,7 @@ const AuthPage = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "https://frs-task.onrender.com/api/auth/login",
         {
           email: formdatalogin.email,
           password: formdatalogin.password,
@@ -73,7 +73,7 @@ const AuthPage = () => {
     formdata.append("profileImage", formdataregister.profileImage);
     try {
         const response = await axios.post(
-            "http://localhost:5000/api/auth/register",
+            "https://frs-task.onrender.com/api/auth/register",
             formdata,{
               headers: {
                 "Content-Type": "multipart/form-data",

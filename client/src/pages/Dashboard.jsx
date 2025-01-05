@@ -9,10 +9,12 @@ const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const [sentrequest, setSentRequest] = useState([]);
+  const [isopen, setIsOpen] = useState(false);
+  const toggle = () => setIsOpen(!isopen);
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:5000/api/auth/logout",
+        "https://frs-task.onrender.com/api/auth/logout",
         {},
         {
           headers: {
@@ -30,7 +32,7 @@ const Dashboard = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/auth/user", {
+      const response = await axios.get("https://frs-task.onrender.com/api/auth/user", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -46,7 +48,7 @@ const Dashboard = () => {
   const fetchRecommendations = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/friends/recommendations",
+        "https://frs-task.onrender.com/api/friends/recommendations",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -62,7 +64,7 @@ const Dashboard = () => {
     try {
       setSentRequest((prev) => [...prev, friendId]);
       const response = await axios.post(
-        `http://localhost:5000/api/friends/request/${friendId}`,
+        `https://frs-task.onrender.com/api/friends/request/${friendId}`,
         {},
         {
           headers: {
@@ -83,7 +85,7 @@ const Dashboard = () => {
   const handleFriendRequest = async (requestId, action) => {
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/friends/request/${requestId}`,
+        `https://frs-task.onrender.com/api/friends/request/${requestId}`,
         { action },
         {
           headers: {
@@ -111,7 +113,10 @@ const Dashboard = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
-              <h1 className="text-2xl md:text-4xl font-extrabold text-pink-500 hover:text-pink-600 transition-colors">
+              <h1
+                className="text-2xl md:text-4xl font-extrabold text-pink-500 hover:text-pink-600 transition-colors"
+                onClick={toggle}
+              >
                 [#]SOCIALS
               </h1>
             </div>
@@ -147,8 +152,15 @@ const Dashboard = () => {
       </header>
 
       <main className="w-full px-4 py-6 flex gap-2">
-        <Card className="hidden md:block p-6 max-h-screen w-1/4">
-          <h2 className="text-2xl font-semibold mb-3 text-gray-800">Friends</h2>
+        <Card
+          className={`fixed inset-y-0 left-0 bg-white z-50 p-6 w-3/4 md:w-1/5 transform ${
+            isopen ? "translate-x-0" : "-translate-x-full"
+          } transition-transform duration-300 md:static md:translate-x-0`}
+        >
+          <div className="flex justify-between items-center text-2xl font-semibold mb-3 text-gray-800">
+          <h2>Friends</h2>
+          <p className="md:block cursor-pointer lg:hidden" onClick={toggle}>X</p>
+          </div>
           <div className="space-y-2">
             {user?.friendRequest?.length > 0 && (
               <div>
@@ -226,7 +238,7 @@ const Dashboard = () => {
           </div>
         </Card>
 
-        <Card className="p-6 h-[calc(100vh-12rem)] w-full ">
+        <Card className="p-6  w-full ">
           <h2 className="text-2xl font-semibold mb-6 text-gray-800">
             Recommendations
           </h2>
