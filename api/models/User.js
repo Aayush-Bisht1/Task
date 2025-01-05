@@ -35,8 +35,8 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
     location: {
-        type: String,
-        default: "",
+      type: String,
+      default: "",
     },
     friends: [
       {
@@ -44,17 +44,25 @@ const userSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
-    friendRequest: [{
-      from: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User" 
+    friendRequest: [
+      {
+        from: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+        status: {
+          type: String,
+          enum: ["pending", "accept", "reject"],
+          default: "pending",
+        },
       },
-      status: {
-        type: String,
-        enum: ["pending", "accepted", "rejected"],
-        default: "pending"
-      }
-    }]
+    ],
+    sentFriendRequests: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true,
