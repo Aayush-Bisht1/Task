@@ -2,6 +2,7 @@ import express from "express";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import cloudinary from "../config/cloudinary.js";
+import { protectedRoute } from "../middleware/auth.js";
 
 const signtoken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -130,12 +131,41 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/logout", async (req, res) => {
+router.post("/logout", protectedRoute, async (req, res) => {
   res.clearCookie("jwt");
   res.status(200).json({
     success: true,
     message: "User logged out successfully",
   });
 });
+
+router.get("/user", protectedRoute, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).populate('friends')
+    .populate('friendRequest.from')
+    .populate('sentFriendRequests');;
+    if(!user){
+      return res.status(400).json({
+        success: false,
+        message: "User not found",
+      })
+    }
+    const sanitizedUser = {
+      ...user.toObject(),
+      sentFriendRequests: user.sentFriendRequests.map(request => 
+          request._id ? request._id.toString() : request.toString()
+      )
+  };
+    res.status(200).json({
+      success: true,
+      user: sanitizedUser,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+})
 
 export default router;
